@@ -5,13 +5,8 @@ services:
     restart: always
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      DB_PATH: /data/xien.db
-      API_URL: https://api.qingyuntop.top/v1/chat/completions
-      MODEL: claude-opus-4-6
-      API_KEY: sk-57wYnxBaP0PkldExpLb1ZiuH4h2BVzzf6tEsIw9ubta6biWY
+    env_file:
+      - .env
     volumes:
       - scrm_data:/data
 
