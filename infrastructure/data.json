@@ -1,0 +1,6 @@
+[
+  { "id": 1, "tenant_id": 1001, "name": "星河时代地下停车场", "city": "深圳", "pinyin": "xinghe shidai shenzhen", "total_spots": 500 },
+  { "id": 2, "tenant_id": 1001, "name": "南山科技园地面车场", "city": "深圳", "pinyin": "nanshan kejiyuan shenzhen", "total_spots": 120 },
+  { "id": 3, "tenant_id": 1002, "name": "中关村新能源快充站", "city": "北京", "pinyin": "zhongguancun beijing", "total_spots": 50 },
+  { "id": 4, "tenant_id": 1003, "name": "陆家嘴金融中心车场", "city": "上海", "pinyin": "lujiazui shanghai", "total_spots": 800 }
+]

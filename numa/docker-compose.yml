@@ -1,0 +1,5 @@
+services:
+  numa:
+    image: ghcr.io/razvandimescu/numa
+    container_name: numa
+    restart: always

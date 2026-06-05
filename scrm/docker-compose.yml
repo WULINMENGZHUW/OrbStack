@@ -1,0 +1,21 @@
+services:
+  app:
+    image: scrm:latest
+    container_name: scrm-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_PATH: /data/xien.db
+      API_URL: https://api.qingyuntop.top/v1/chat/completions
+      MODEL: claude-opus-4-6
+      API_KEY: sk-57wYnxBaP0PkldExpLb1ZiuH4h2BVzzf6tEsIw9ubta6biWY
+    volumes:
+      - scrm_data:/data
+
+volumes:
+  scrm_data:
+    external: true
+    name: scrm-backup_scrm_data

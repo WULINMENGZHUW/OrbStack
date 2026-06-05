@@ -1,0 +1,3 @@
+# This file exists so OrbStack can manage this project root.
+# Actual services are in subdirectories — see README.md.
+services: {}

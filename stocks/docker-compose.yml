@@ -1,0 +1,16 @@
+services:
+  stocks:
+    image: stocks-stocks
+    container_name: stocks-stocks-1
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DB_PATH: /data/stocks.db
+    volumes:
+      - stocks_data:/data
+
+volumes:
+  stocks_data:
+    external: true
+    name: stocks_stocks_data

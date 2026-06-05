@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: litellm-db
+    restart: always
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: litellm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  proxy:
+    image: docker.litellm.ai/berriai/litellm:1.86.0-rc.1
+    container_name: litellm-proxy
+    restart: always
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://litellm:litellm@db:5432/litellm
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+    external: true
+    name: code_postgres_data

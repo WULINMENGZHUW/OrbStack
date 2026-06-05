@@ -1,0 +1,9 @@
+services:
+  gateway:
+    image: portkeyai/gateway:latest
+    container_name: portkey-gateway
+    restart: always
+    ports:
+      - "8787:8787"
+    environment:
+      LOG_LEVEL: info

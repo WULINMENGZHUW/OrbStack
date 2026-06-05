@@ -1,0 +1,151 @@
+model_list:
+  # ── OpenAI 模型 ──────────────────────────────────────────
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/RELAY_A_OPENAI_KEY
+      api_base: os.environ/RELAY_A_BASE
+      # weight: 1  # 可选：权重，默认均等
+
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/RELAY_B_OPENAI_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  - model_name: gpt-4
+    litellm_params:
+      model: openai/gpt-4
+      api_key: os.environ/RELAY_A_OPENAI_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: gpt-3.5-turbo
+    litellm_params:
+      model: openai/gpt-3.5-turbo
+      api_key: os.environ/RELAY_A_OPENAI_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  # ── Anthropic Claude 模型（OpenAI 兼容格式，中转站用 Bearer 认证）────
+  - model_name: claude-opus-4
+    litellm_params:
+      model: openai/claude-opus-4-7
+      api_key: os.environ/RELAY_A_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: claude-opus-4
+    litellm_params:
+      model: openai/claude-opus-4-7-aws
+      api_key: os.environ/RELAY_B_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  - model_name: claude-sonnet-4
+    litellm_params:
+      model: openai/claude-sonnet-4-6
+      api_key: os.environ/RELAY_A_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: claude-sonnet-4
+    litellm_params:
+      model: openai/claude-sonnet-4-6-aws
+      api_key: os.environ/RELAY_B_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  - model_name: claude-haiku-4
+    litellm_params:
+      model: openai/claude-haiku-4-5-20251001
+      api_key: os.environ/RELAY_A_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: claude-haiku-4
+    litellm_params:
+      model: openai/claude-haiku-4-5-aws
+      api_key: os.environ/RELAY_B_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  # ── 测试专用（直连指定渠道，不参与路由均衡）─────────────────
+  - model_name: claude-opus-4@relay-a
+    litellm_params:
+      model: openai/claude-opus-4-7
+      api_key: os.environ/RELAY_A_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: claude-opus-4@relay-b
+    litellm_params:
+      model: openai/claude-opus-4-7-aws
+      api_key: os.environ/RELAY_B_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  - model_name: claude-sonnet-4@relay-a
+    litellm_params:
+      model: openai/claude-sonnet-4-6
+      api_key: os.environ/RELAY_A_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: claude-sonnet-4@relay-b
+    litellm_params:
+      model: openai/claude-sonnet-4-6-aws
+      api_key: os.environ/RELAY_B_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  - model_name: claude-haiku-4@relay-a
+    litellm_params:
+      model: openai/claude-haiku-4-5-20251001
+      api_key: os.environ/RELAY_A_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: claude-haiku-4@relay-b
+    litellm_params:
+      model: openai/claude-haiku-4-5-aws
+      api_key: os.environ/RELAY_B_ANTHROPIC_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  - model_name: gpt-4o@relay-a
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/RELAY_A_OPENAI_KEY
+      api_base: os.environ/RELAY_A_BASE
+
+  - model_name: gpt-4o@relay-b
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/RELAY_B_OPENAI_KEY
+      api_base: os.environ/RELAY_B_BASE
+
+  # ── DeepSeek（官方直连）──────────────────────────────────
+  - model_name: deepseek-v4-flash
+    litellm_params:
+      model: deepseek/deepseek-v4-flash
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+  - model_name: deepseek-v4-pro
+    litellm_params:
+      model: deepseek/deepseek-v4-pro
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+  # 旧名保留做兼容，指向新模型，弃用前可删除
+  - model_name: deepseek-chat
+    litellm_params:
+      model: deepseek/deepseek-v4-flash
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+  - model_name: deepseek-reasoner
+    litellm_params:
+      model: deepseek/deepseek-v4-pro
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+router_settings:
+  routing_strategy: least-busy
+  num_retries: 3
+  disable_cooldowns: true       # 防止 500 错误触发冷却屏蔽渠道
+  allowed_fails: 5              # 连续失败 5 次才触发 cooldown
+  cooldown_time: 10             # cooldown 缩短到 10 秒
+  fallbacks:
+    - claude-opus-4: [claude-sonnet-4]
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/DATABASE_URL
